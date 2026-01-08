@@ -213,12 +213,10 @@ class BarcodeScannerViewController: UIViewController {
   
   private func errorResult(errorCode: String){
     delegate?.didFailWithErrorCode(self, errorCode: errorCode)
-    self.navigationController?.presentingViewController?.dismiss(animated: false)
   }
 
   private func scanResult(_ scanResult: ScanResult){
     self.delegate?.didScanBarcodeWithResult(self, scanResult: scanResult)
-    self.navigationController?.presentingViewController?.dismiss(animated: false)
   }
   
   private func mapRestrictedBarcodeTypes() -> [String] {
