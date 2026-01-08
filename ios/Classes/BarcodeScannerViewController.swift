@@ -38,7 +38,7 @@ class BarcodeScannerViewController: UIViewController {
   ]
   
   var delegate: BarcodeScannerViewControllerDelegate?
-  
+
   private var device: AVCaptureDevice? {
     return AVCaptureDevice.default(for: .video)
   }
@@ -213,10 +213,12 @@ class BarcodeScannerViewController: UIViewController {
   
   private func errorResult(errorCode: String){
     delegate?.didFailWithErrorCode(self, errorCode: errorCode)
+    dismiss(animated: false)
   }
 
   private func scanResult(_ scanResult: ScanResult){
-    self.delegate?.didScanBarcodeWithResult(self, scanResult: scanResult)
+    delegate?.didScanBarcodeWithResult(self, scanResult: scanResult)
+    dismiss(animated: false)
   }
   
   private func mapRestrictedBarcodeTypes() -> [String] {
