@@ -39,6 +39,8 @@ class BarcodeScannerViewController: UIViewController {
   
   var delegate: BarcodeScannerViewControllerDelegate?
 
+  private var isFinishing = false
+
   private var device: AVCaptureDevice? {
     return AVCaptureDevice.default(for: .video)
   }
@@ -85,13 +87,15 @@ class BarcodeScannerViewController: UIViewController {
   
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
-    
+
+    guard !isFinishing else { return }
+
     if scanner!.isScanning() {
       scanner!.stopScanning()
     }
-    
+
     UIDevice.current.endGeneratingDeviceOrientationNotifications()
-    
+
     scanRect?.startAnimating()
     MTBBarcodeScanner.requestCameraPermission(success: { success in
       if success {
@@ -212,13 +216,15 @@ class BarcodeScannerViewController: UIViewController {
   }
   
   private func errorResult(errorCode: String){
+    guard !isFinishing else { return }
+    isFinishing = true
     delegate?.didFailWithErrorCode(self, errorCode: errorCode)
-    dismiss(animated: false)
   }
 
   private func scanResult(_ scanResult: ScanResult){
+    guard !isFinishing else { return }
+    isFinishing = true
     delegate?.didScanBarcodeWithResult(self, scanResult: scanResult)
-    dismiss(animated: false)
   }
   
   private func mapRestrictedBarcodeTypes() -> [String] {
